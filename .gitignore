@@ -4,3 +4,5 @@ storage
 .env
 npm-debug.log
 .vscode
+.eslintignore
+.eslintrc

@@ -19,4 +19,4 @@ const Route = use('Route')
 
 Route.on('/').render('welcome')
 
-Route.post('/upload', 'AudioRecordingController.upload')
+Route.post('/equations', 'EquationController.store')

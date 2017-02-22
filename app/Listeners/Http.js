@@ -3,6 +3,7 @@
 const Env = use('Env')
 const Youch = use('youch')
 const Http = exports = module.exports = {}
+const Response = use('Response')
 
 /**
  * handle errors occured during a Http request.
@@ -30,7 +31,13 @@ Http.handleError = function * (error, request, response) {
    * PRODUCTION REPORTER
    */
   console.error(error.stack)
-  yield response.status(status).sendView('errors/index', {error})
+
+  let jsonResponse = {
+    code: status,
+    message: error.message
+  }
+
+  yield response.status(status).json({ error: { jsonResponse } })
 }
 
 /**
@@ -38,4 +45,7 @@ Http.handleError = function * (error, request, response) {
  * starting http server.
  */
 Http.onStart = function () {
+  Response.macro('sendJson', function (data) {
+    this.json({ data })
+  })
 }

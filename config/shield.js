@@ -58,7 +58,7 @@ module.exports = {
   | Javascript. You can disable this behavior by setting nosniff to false.
   |
   */
-  nosniff: true,
+  nosniff: false,
 
   /*
   |--------------------------------------------------------------------------
@@ -81,7 +81,7 @@ module.exports = {
   |
   */
   csrf: {
-    enable: true,
+    enable: false,
     methods: ['POST', 'PUT', 'DELETE'],
     filterUris: [],
     compareHostAndOrigin: true
