@@ -2,7 +2,7 @@
 
 const Lucid = use('Lucid')
 
-class AudioRecording extends Lucid {
+class Audio extends Lucid {
 
   /**
    * Get the image directory path
@@ -10,8 +10,8 @@ class AudioRecording extends Lucid {
    * @returns {string}
    */
   static getImageDirectory() {
-    return `audio/recordings`;
+    return `audios/recordings`;
   }
 }
 
-module.exports = AudioRecording;
+module.exports = Audio;
