@@ -9,6 +9,10 @@
     "serve": "node server.js",
     "lint": "standard"
   },
+  "keywords": [
+    "example",
+    "heroku"
+  ],
   "author": "",
   "license": "MIT",
   "description": "",
@@ -39,5 +43,8 @@
   "devDependencies": {
     "nodemon": "^1.11.0",
     "standard": "^8.6.0"
+  },
+  "engines": {
+    "node": "6.6.0"
   }
 }
