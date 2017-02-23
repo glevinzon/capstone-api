@@ -23,6 +23,7 @@ const providers = [
   'adonis-framework/providers/ServerProvider',
   'adonis-framework/providers/SessionProvider',
   'adonis-framework/providers/StaticProvider',
+  'adonis-validation-provider/providers/ValidatorProvider',
   'adonis-framework/providers/ViewProvider',
   'adonis-lucid/providers/DatabaseProvider',
   'adonis-lucid/providers/LucidProvider',
@@ -66,6 +67,7 @@ const aliases = {
   Command: 'Adonis/Src/Command',
   Config: 'Adonis/Src/Config',
   Database: 'Adonis/Src/Database',
+  Encryption: 'Adonis/Src/Encryption',
   Env: 'Adonis/Src/Env',
   Event: 'Adonis/Src/Event',
   Factory: 'Adonis/Src/Factory',
@@ -73,8 +75,10 @@ const aliases = {
   Helpers: 'Adonis/Src/Helpers',
   Lucid: 'Adonis/Src/Lucid',
   Middleware: 'Adonis/Src/Middleware',
+  Response: 'Adonis/Src/Response',
   Route: 'Adonis/Src/Route',
   Schema: 'Adonis/Src/Schema',
+  Validator: 'Adonis/Addons/Validator',
   View: 'Adonis/Src/View',
   Ws: 'Adonis/Addons/Ws'
 }
