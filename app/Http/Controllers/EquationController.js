@@ -12,22 +12,24 @@ class EquationController {
 
   * store (request, response) {
     let equationOp = new EquationOperation()
-
     let {
+      id,
       username,
       name,
       note,
       audioUrl,
-      active
+      active,
+      currentValues
     } = request.post()
 
     let eqId = request.param('eqId')
 
-    equationOp.id = eqId
+    equationOp.id = eqId ? eqId : id
     equationOp.username = username
     equationOp.name = name
     equationOp.note = note
     equationOp.audioUrl = audioUrl
+    equationOp.tags = currentValues
     equationOp.active = active
 
     let equation = yield equationOp.store()
