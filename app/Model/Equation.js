@@ -9,16 +9,16 @@ const Base = use('App/Model/Base')
  */
 class Equation extends Base {
 
-  user() {
+  user () {
     return this.belongsTo('App/Model/User')
   }
 
-  tag() {
+  tag () {
     return this.belongsTo('App/Model/Tag')
   }
 
-  records() {
-    return this.hasMany('App/Model/Record', 'id', 'eqId');
+  records () {
+    return this.hasMany('App/Model/Record', 'id', 'eqId')
   }
 }
 

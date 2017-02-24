@@ -8,8 +8,8 @@ const Base = use('App/Model/Base')
  */
 class Tag extends Base {
 
-  records() {
-    return this.hasMany('App/Model/Record', 'id', 'tagId');
+  records () {
+    return this.hasMany('App/Model/Record', 'id', 'tagId')
   }
 }
 

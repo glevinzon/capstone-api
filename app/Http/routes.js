@@ -20,3 +20,4 @@ const Route = use('Route')
 Route.on('/').render('welcome')
 
 Route.post('/equations', 'EquationController.store')
+Route.get('/equations', 'EquationController.list')

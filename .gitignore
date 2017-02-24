@@ -6,3 +6,5 @@ npm-debug.log
 .vscode
 .eslintignore
 .eslintrc
+
+.env.prod

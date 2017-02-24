@@ -27,8 +27,11 @@ class EquationOperation extends Operation {
     this.name = null
     this.note = null
     this.audioUrl = null
-    this.tags = null
+    this.tags = []
     this.active = null
+    this.filter = null
+    this.page = null
+    this.count = null
   }
 
   get rules () {
@@ -70,7 +73,7 @@ class EquationOperation extends Operation {
 
       let keywords = this.tags
 
-      yield * foreach(keywords, records)
+      yield * foreach(['glevinzon', 'dapal', 'glen'], records)
 
       function * records (value) {
         let tag = yield Tag.findOrCreate(
@@ -92,9 +95,20 @@ class EquationOperation extends Operation {
   }
 
   * getList () {
-    let equations = yield Equation.all()
+    try {
+      let equations = new Equation()
 
-    return equations
+      if (this.filter === 'paginate') {
+        equations = yield Equation.query().orderBy('created_at', 'desc').paginate(this.page, this.count)
+      } else {
+        equations = yield Equation.all()
+      }
+
+      return equations
+    } catch (e) {
+      this.addError(HTTPResponse.STATUS_INTERNAL_SERVER_ERROR, e.message)
+      return false
+    }
   }
 
   // * getShop () {

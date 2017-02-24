@@ -24,7 +24,7 @@ class EquationController {
 
     let eqId = request.param('eqId')
 
-    equationOp.id = eqId ? eqId : id
+    equationOp.id = eqId || id
     equationOp.username = username
     equationOp.name = name
     equationOp.note = note
@@ -45,6 +45,12 @@ class EquationController {
 
   * list (request, response) {
     let equationOp = new EquationOperation()
+    let { filter, page, count } = request.all()
+
+    equationOp.filter = filter
+    equationOp.page = page
+    equationOp.count = count
+
     let equation = yield equationOp.getList()
 
     response.sendJson(equation)
