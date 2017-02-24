@@ -3,7 +3,6 @@
 const Base = use('App/Model/Base')
 
 /**
- * Generate a slug for Product
  *
  * @author glen
  */

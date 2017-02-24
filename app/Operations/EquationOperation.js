@@ -4,10 +4,14 @@ const { HttpException } = use('node-exceptions')
 const HTTPResponse = use('App/HTTPResponse')
 const Operation = use('App/Operations/Operation')
 const User = use('App/Model/User')
+const Tag = use('App/Model/Tag')
+const Record = use('App/Model/Record')
 const Equation = use('App/Model/Equation')
+const _ = use('lodash')
+const foreach = require('generator-foreach')
 
 /**
- * Operations for Shop model
+ * Operations for Equation model
  *
  * @author glen
  * @class
@@ -23,6 +27,7 @@ class EquationOperation extends Operation {
     this.name = null
     this.note = null
     this.audioUrl = null
+    this.tags = null
     this.active = null
   }
 
@@ -62,6 +67,22 @@ class EquationOperation extends Operation {
       equation.active = this.active
 
       yield equation.save()
+
+      let keywords = this.tags
+
+      yield * foreach(keywords, records)
+
+      function * records (value) {
+        let tag = yield Tag.findOrCreate(
+                      { name: value },
+                      { name: value })
+        let record = new Record()
+
+        record.eqId = equation.id
+        record.tagId = tag.id
+
+        yield record.save()
+      }
 
       return equation
     } catch (e) {
