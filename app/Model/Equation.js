@@ -12,6 +12,10 @@ class Equation extends Base {
   user() {
     return this.belongsTo('App/Model/User')
   }
+
+  records() {
+    return this.hasMany('App/Model/Record', 'id', 'eqId');
+  }
 }
 
 module.exports = Equation
