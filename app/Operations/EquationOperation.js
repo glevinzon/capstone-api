@@ -73,7 +73,7 @@ class EquationOperation extends Operation {
 
       let keywords = this.tags
 
-      yield * foreach(['glevinzon', 'dapal', 'glen'], records)
+      yield * foreach(keywords, records)
 
       function * records (value) {
         let tag = yield Tag.findOrCreate(
@@ -104,7 +104,9 @@ class EquationOperation extends Operation {
         equations = yield Equation.all()
       }
 
-      return equations
+      let tags = yield Tag.all()
+
+      return {'equations':equations, 'tags': tags}
     } catch (e) {
       this.addError(HTTPResponse.STATUS_INTERNAL_SERVER_ERROR, e.message)
       return false
