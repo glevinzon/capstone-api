@@ -139,22 +139,24 @@ class EquationOperation extends Operation {
   //   }
   // }
 
-  // * destroy () {
-  //   try {
-  //     let shop = yield Shop.find(this.id)
+  * destroy () {
+    try {
+      let equation = yield Equation.find(this.id)
+      let record = yield Record.findBy('eqId', this.id)
+      if (!equation) {
+        this.addError(HTTPResponse.STATUS_NOT_FOUND, 'The equation does not exist')
+        return false
+      }
 
-  //     if (!shop) {
-  //       this.addError(HTTPResponse.STATUS_NOT_FOUND, 'The shop does not exist')
-  //       return false
-  //     }
+      yield equation.delete()
+      yield record.delete()
 
-  //     yield shop.delete()
-
-  //     return true
-  //   } catch (e) {
-  //     this.addError(HTTPResponse.STATUS_INTERNAL_SERVER_ERROR, e.message)
-  //     return false
-  //   }
+      return true
+    } catch (e) {
+      this.addError(HTTPResponse.STATUS_INTERNAL_SERVER_ERROR, e.message)
+      return false
+    }
+  }
 }
 
 module.exports = EquationOperation

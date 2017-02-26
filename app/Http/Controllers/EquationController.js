@@ -72,21 +72,21 @@ class EquationController {
 //     response.sendJson(equation)
 //   }
 
-//   * destroy (request, response) {
-//     let equationOp = new EquationOperation()
-//     let equationId = request.param('equationId')
+  * destroy (request, response) {
+    let equationOp = new EquationOperation()
+    let eqId = request.param('eqId')
 
-//     equationOp.id = equationId
+    equationOp.id = eqId
 
-//     let equation = yield equationOp.destroy()
+    let equation = yield equationOp.destroy()
 
-//     if (equation === false) {
-//       let error = equationOp.getFirstError()
+    if (equation === false) {
+      let error = equationOp.getFirstError()
 
-//       throw new HttpException(error.message, error.code)
-//     }
-//     response.send()
-//   }
+      throw new HttpException(error.message, error.code)
+    }
+    response.sendJson()
+  }
 }
 
 module.exports = EquationController

@@ -21,3 +21,4 @@ Route.on('/').render('welcome')
 
 Route.post('/equations', 'EquationController.store')
 Route.get('/equations', 'EquationController.list')
+Route.delete('/equation/:eqId', 'EquationController.destroy')
