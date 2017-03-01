@@ -119,26 +119,27 @@ class EquationOperation extends Operation {
   * getEquation () {
     try {
       let equations = new Equation()
+      var result = []
       if (this.keyword) {
         if (this.by === 'equation') {
           equations = yield Equation.findBy('name', this.keyword)
-          return equations
+          result = result.concat(equations)
         } else if (this.by === 'note') {
           equations = yield Equation.findBy('note', this.keyword)
-          return equations
+          result = result.concat(equations)
         } else if (this.by === 'tag') {
           let tag = yield Tag.findBy('name', this.keyword)
           let records = yield Record
                       .query().where('tagId', tag.id)
-          var result = []
+
           yield * foreach(records, search)
 
           function * search (record) {
             let equation = yield Equation.query().where('id', record.eqId)
             result = result.concat(equation)
           }
-          return result
         }
+        return result
       }
     } catch (e) {
       this.addError(HTTPResponse.STATUS_INTERNAL_SERVER_ERROR, e.message)
