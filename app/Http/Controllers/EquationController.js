@@ -56,21 +56,21 @@ class EquationController {
     response.sendJson(equation)
   }
 
-//   * show (request, response) {
-//     let equationOp = new EquationOperation()
-//     let equationId = request.param('equationId')
+  * show (request, response) {
+    let equationOp = new EquationOperation()
+    let { by, keyword } = request.all()
 
-//     equationOp.id = equationId
+    equationOp.by = by
+    equationOp.keyword = keyword
 
-//     let equation = yield equationOp.getequation()
+    let equations = yield equationOp.getEquation()
+    if (equations === false) {
+      let error = equationOp.getFirstError()
 
-//     if (equation === false) {
-//       let error = equationOp.getFirstError()
-
-//       throw new HttpException(error.message, error.code)
-//     }
-//     response.sendJson(equation)
-//   }
+      throw new HttpException(error.message, error.code)
+    }
+    response.sendJson(equations)
+  }
 
   * destroy (request, response) {
     let equationOp = new EquationOperation()

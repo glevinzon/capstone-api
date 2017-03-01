@@ -32,6 +32,8 @@ class EquationOperation extends Operation {
     this.filter = null
     this.page = null
     this.count = null
+    this.by = null
+    this.keyword = null
   }
 
   get rules () {
@@ -114,30 +116,35 @@ class EquationOperation extends Operation {
     }
   }
 
-  // * getShop () {
-  //   try {
-  //     let shop = new Shop()
-  //     let id = this.id
+  * getEquation () {
+    try {
+      let equations = new Equation()
+      if (this.keyword) {
+        if (this.by === 'equation') {
+          equations = yield Equation.findBy('name', this.keyword)
+          return equations
+        } else if (this.by === 'note') {
+          equations = yield Equation.findBy('note', this.keyword)
+          return equations
+        } else if (this.by === 'tag') {
+          let tag = yield Tag.findBy('name', this.keyword)
+          let records = yield Record
+                      .query().where('tagId', tag.id)
+          var result = []
+          yield * foreach(records, search)
 
-  //     if (id) {
-  //       shop = yield Shop.find(id)
-  //       yield shop.related('properties').load()
-  //       yield shop.related('branches').load()
-
-  //       yield this.increaseShopViews(id)
-
-  //       if (!shop) {
-  //         this.addError(HTTPResponse.STATUS_NOT_FOUND, 'The shop does not exist')
-  //         return false
-  //       }
-  //     }
-
-  //     return shop
-  //   } catch (e) {
-  //     this.addError(HTTPResponse.STATUS_INTERNAL_SERVER_ERROR, e.message)
-  //     return false
-  //   }
-  // }
+          function * search (record) {
+            let equation = yield Equation.query().where('id', record.eqId)
+            result = result.concat(equation)
+          }
+          return result
+        }
+      }
+    } catch (e) {
+      this.addError(HTTPResponse.STATUS_INTERNAL_SERVER_ERROR, e.message)
+      return false
+    }
+  }
 
   * destroy () {
     try {
