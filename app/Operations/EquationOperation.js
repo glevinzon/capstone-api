@@ -10,6 +10,9 @@ const Equation = use('App/Model/Equation')
 const _ = use('lodash')
 const foreach = require('generator-foreach')
 
+const Audio = use('App/Model/Audio');
+const AudioOperation = use('App/Operations/AudioOperation');
+
 /**
  * Operations for Equation model
  *
@@ -34,6 +37,7 @@ class EquationOperation extends Operation {
     this.count = null
     this.by = null
     this.keyword = null
+    this.audio = null
   }
 
   get rules () {
@@ -163,6 +167,40 @@ class EquationOperation extends Operation {
     } catch (e) {
       this.addError(HTTPResponse.STATUS_INTERNAL_SERVER_ERROR, e.message)
       return false
+    }
+  }
+
+  * uploadAudio() {
+    if (!this.audio) {
+      this.addError(HTTPResponse.STATUS_INTERNAL_SERVER_ERROR, 'No audio selected');
+
+      return false;
+    }
+
+    const directory = Audio.getAudioDirectory();
+    const filename = `ID${this.id}_${moment().format("YYYYMMDD-HHmmss")}`;
+
+    try {
+      if (!this.audioUrl) {
+        this.audioUrl = yield AudioOperation.getAudioUrlFromFile(this.audio, directory, filename);
+      }
+
+      let equation = new Equation()
+      if(this.id){
+        equation = yield Equation.findBy('id', this.id)
+        if(!equation){
+          this.addError(HTTPResponse.STATUS_NOT_FOUND, 'The equation does not exist')
+          return false
+        }
+      }
+      equation.audioUrl = Env.get('API_HOST') + this.audioUrl
+      yield equation.save()
+
+      return equation;
+    } catch (e) {
+      this.addError(HTTPResponse.STATUS_INTERNAL_SERVER_ERROR, e.message);
+
+      return false;
     }
   }
 }

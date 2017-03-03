@@ -5,11 +5,11 @@ const Lucid = use('Lucid')
 class Audio extends Lucid {
 
   /**
-   * Get the image directory path
+   * Get the audio directory path
    *
    * @returns {string}
    */
-  static getImageDirectory() {
+  static getAudioDirectory() {
     return `audios/recordings`;
   }
 }

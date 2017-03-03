@@ -87,6 +87,26 @@ class EquationController {
     }
     response.sendJson()
   }
+
+  * updateProfilePhoto (request, response) {
+    const equationOp = new EquationOperation();
+    const fileUploaded = request.file('audio', {
+      maxSize: '3mb'
+    });
+
+    equationOp.id = request.param('id');
+    equationOp.audio = fileUploaded;
+
+    let equations = yield equationOp.uploadAudio();
+
+    if (equations === false) {
+      let error = equationOp.getFirstError();
+
+      throw new HttpException(error.message, error.code);
+    }
+
+    response.sendJson(equations);
+  }
 }
 
 module.exports = EquationController
