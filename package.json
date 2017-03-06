@@ -33,6 +33,7 @@
     "eslint-plugin-babel": "^4.0.1",
     "generator-foreach": "^0.1.0",
     "lodash": "^4.17.4",
+    "moment": "^2.17.1",
     "mysql": "^2.13.0",
     "node-exceptions": "^1.0.3",
     "node-uuid": "^1.4.7",

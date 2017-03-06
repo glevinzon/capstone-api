@@ -88,13 +88,14 @@ class EquationController {
     response.sendJson()
   }
 
-  * updateProfilePhoto (request, response) {
+  * uploadFile (request, response) {
     const equationOp = new EquationOperation();
     const fileUploaded = request.file('audio', {
-      maxSize: '3mb'
+      maxSize: '3mb',
+      allowedExtensions: ['m4a', '3gp', 'mp4', 'mp3', 'wav', 'mkv', 'ogg']
     });
 
-    equationOp.id = request.param('id');
+    equationOp.id = request.param('eqId');
     equationOp.audio = fileUploaded;
 
     let equations = yield equationOp.uploadAudio();
