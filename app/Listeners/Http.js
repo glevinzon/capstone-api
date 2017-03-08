@@ -37,7 +37,7 @@ Http.handleError = function * (error, request, response) {
     message: error.message
   }
 
-  yield response.status(status).json({ error: { jsonResponse } })
+  yield response.status(status).json({ error: jsonResponse })
 }
 
 /**
