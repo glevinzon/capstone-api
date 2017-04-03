@@ -46,6 +46,6 @@ Http.handleError = function * (error, request, response) {
  */
 Http.onStart = function () {
   Response.macro('sendJson', function (data) {
-    this.json({ data })
+    this.json(data)
   })
 }
