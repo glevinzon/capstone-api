@@ -30,7 +30,8 @@ const providers = [
   'adonis-lucid/providers/FactoryProvider',
   'adonis-middleware/providers/AppMiddlewareProvider',
   'adonis-auth/providers/AuthManagerProvider',
-  'adonis-websocket/providers/WsProvider'
+  'adonis-websocket/providers/WsProvider',
+  'adonis-scheduler/providers/SchedulerProvider'
 ]
 
 /*
@@ -50,7 +51,8 @@ const aceProviders = [
   'adonis-ace/providers/CommandProvider',
   'adonis-commands/providers/GeneratorsProvider',
   'adonis-commands/providers/HelperCommandsProvider',
-  'adonis-commands/providers/ReplProvider'
+  'adonis-commands/providers/ReplProvider',
+  'adonis-scheduler/providers/CommandsProvider'
 ]
 
 /*
@@ -80,7 +82,8 @@ const aliases = {
   Schema: 'Adonis/Src/Schema',
   Validator: 'Adonis/Addons/Validator',
   View: 'Adonis/Src/View',
-  Ws: 'Adonis/Addons/Ws'
+  Ws: 'Adonis/Addons/Ws',
+  Scheduler: 'Adonis/Addons/Scheduler'
 }
 
 /*
@@ -112,7 +115,8 @@ const commands = [
   'Adonis/Commands/Migration:Reset',
   'Adonis/Commands/DB:Seed',
   'Adonis/Commands/Migration:Status',
-  'Adonis/Commands/Key:Generate'
+  'Adonis/Commands/Key:Generate',
+  'Adonis/Commands/Scheduler:Run'
 ]
 
 module.exports = { providers, aceProviders, aliases, commands }
