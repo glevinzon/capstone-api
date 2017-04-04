@@ -18,7 +18,6 @@ class Broadcast {
 
     var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
         to: token,
-
         notification: {
             title: title,
             body: message,
