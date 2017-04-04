@@ -15,6 +15,8 @@ const Env = use('Env');
 const Audio = use('App/Model/Audio');
 const AudioOperation = use('App/Operations/AudioOperation');
 
+var request = require('request')
+
 /**
  * Operations for Equation model
  *
@@ -224,6 +226,39 @@ class EquationAppOperation extends Operation {
 
       return false;
     }
+  }
+
+  * sendMessageToUser(deviceId, message) {
+    request({
+      url: 'https://fcm.googleapis.com/fcm/send',
+      method: 'POST',
+      headers: {
+        'Content-Type' : 'application/json',
+        'Authorization': 'key=AAAA97QjpFE:APA91bFjditA2VHzGPi2Ox25VX9Hq8UkHz58eSpcAJWC1ANyubZZMB-VZoYVi5gqmg_MOMStPdI0rS2Lwezan1F_zLq5kcYA8wIQ6wC9yzJOLk3sXuWW_HBHuHTbKwgdCiuciaEOX5_i'
+      },
+      body: JSON.stringify(
+        {
+        "notification": {
+          "title": "Capstone Notification",
+          "text": "This is a test."
+        },
+        "data": {
+            "message": message
+          },
+        "to" : deviceId
+        }
+      )
+    }, function(error, response, body) {
+      if (error) {
+        console.error(error, response, body);
+      }
+      else if (response.statusCode >= 400) {
+        console.error('HTTP Error: '+response.statusCode+' - '+response.statusMessage+'\n'+body);
+      }
+      else {
+        console.log('Done!')
+      }
+    })
   }
 }
 

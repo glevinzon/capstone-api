@@ -53,6 +53,17 @@ class TokenOperation extends Operation {
       return false
     }
   }
+
+  * getList () {
+    try {
+      let tokens = yield Token.all()
+
+      return tokens
+    } catch (e) {
+      this.addError(HTTPResponse.STATUS_INTERNAL_SERVER_ERROR, e.message)
+      return false
+    }
+  }
 }
 
 module.exports = TokenOperation
