@@ -1,2 +1,2 @@
 web: npm run serve
-web: ./ace scheduler:run
+web2: ./ace scheduler:run
