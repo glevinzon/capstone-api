@@ -1,1 +1,1 @@
-web: ./ace migration:run && npm run serve
+web: npm run serve
