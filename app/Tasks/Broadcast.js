@@ -1,8 +1,5 @@
 'use strict';
-const EquationAppOperation = use('App/Operations/EquationAppOperation')
-const TokenOperation = use('App/Operations/TokenOperation')
-const _ = use('lodash')
-const foreach = require('generator-foreach')
+const EquationOperation = use('App/Operations/EquationOperation')
 
 class Broadcast {
 
@@ -15,19 +12,12 @@ class Broadcast {
 
   // This is the function that is called at the defined schedule
   * handle() {
-    const broadcastOp = new EquationAppOperation()
-    const tokenOp = new TokenOperation()
-    let tokens = yield tokenOp.getList()
-    let tokensArr = []
-    _.toArray(tokens).map((token=> {
-      tokensArr.push(token)
-    }))
+    let eqOp = new EquationOperation
 
-    yield * foreach(tokensArr, results)
+    let title = 'Quarterly Update'
+    let text = 'This is a test.'
 
-      function * results (value) {
-        yield broadcastOp.sendMessageToUser(value.device_token, {message: 'Capstone Notification'})
-      }
+    yield eqOp.broadcastNotif({'title': title, 'text': text})
 
   }
 

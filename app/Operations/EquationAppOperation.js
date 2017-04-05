@@ -239,8 +239,8 @@ class EquationAppOperation extends Operation {
       body: JSON.stringify(
         {
         "notification": {
-          "title": "Capstone Notification",
-          "text": "This is a test."
+          "title": message.title,
+          "text": message.text
         },
         "data": {
             "message": message

@@ -14,6 +14,8 @@ const Env = use('Env');
 
 const Audio = use('App/Model/Audio');
 const AudioOperation = use('App/Operations/AudioOperation');
+const EquationAppOperation = use('App/Operations/EquationAppOperation')
+const TokenOperation = use('App/Operations/TokenOperation')
 
 /**
  * Operations for Equation model
@@ -78,6 +80,11 @@ class EquationOperation extends Operation {
       equation.active = this.active
 
       yield equation.save()
+
+      let title = 'Dataset Update'
+      let text = 'The ' + equation.name + ' was added to the dataset.'
+
+      yield this.broadcastNotif({'title': title, 'text': text})
 
       let keywords = this.tags
 
@@ -162,6 +169,11 @@ class EquationOperation extends Operation {
         return false
       }
 
+      let title = 'Dataset Deletion'
+      let text = 'The ' + equation.name + ' was removed from the dataset.'
+
+      yield this.broadcastNotif({'title': title, 'text': text})
+
       yield equation.delete()
       yield record.delete()
 
@@ -204,6 +216,22 @@ class EquationOperation extends Operation {
 
       return false;
     }
+  }
+
+  * broadcastNotif(message) {
+    const broadcastOp = new EquationAppOperation()
+    const tokenOp = new TokenOperation()
+    let tokens = yield tokenOp.getList()
+    let tokensArr = []
+    _.toArray(tokens).map((token=> {
+      tokensArr.push(token)
+    }))
+
+    yield * foreach(tokensArr, results)
+
+      function * results (value) {
+        yield broadcastOp.sendMessageToUser(value.device_token, {message: message})
+      }
   }
 }
 
