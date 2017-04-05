@@ -243,7 +243,7 @@ class EquationAppOperation extends Operation {
           "text": message.text
         },
         "data": {
-            "message": message
+            "message": 'Notification Service'
           },
         "to" : deviceId
         }

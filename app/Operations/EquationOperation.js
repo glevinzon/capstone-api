@@ -230,7 +230,7 @@ class EquationOperation extends Operation {
     yield * foreach(tokensArr, results)
 
       function * results (value) {
-        yield broadcastOp.sendMessageToUser(value.device_token, {message: message})
+        yield broadcastOp.sendMessageToUser(value.device_token, message)
       }
   }
 }
