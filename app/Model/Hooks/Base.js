@@ -1,12 +1,12 @@
 'use strict'
 
 const Base = exports = module.exports = {}
-const uuid = use('node-uuid')
+var shortid = require('shortid');
 
 Base.generateCode = function * (next) {
 
   if (typeof this.code === 'undefined') {
-    this.code = uuid.v4()
+    this.code = shortid.generate()
   }
 
   yield next
