@@ -17,11 +17,6 @@ const AudioOperation = use('App/Operations/AudioOperation');
 const EquationAppOperation = use('App/Operations/EquationAppOperation')
 const TokenOperation = use('App/Operations/TokenOperation')
 
-var PImage = require('pureimage');
-var fs = require('fs');
-const Helpers = use('Helpers')
-const storagePath = Helpers.publicPath()
-
 /**
  * Operations for Equation model
  *
@@ -90,8 +85,6 @@ class EquationOperation extends Operation {
 
       let title = 'Dataset Update'
       let text = 'The ' + equation.name + ' was added to the dataset.'
-
-      yield this.broadcastNotif({'title': title, 'text': text})
 
       let keywords = this.tags
 
@@ -239,17 +232,6 @@ class EquationOperation extends Operation {
       function * results (value) {
         yield broadcastOp.sendMessageToUser(value.device_token, message)
       }
-  }
-
-  * codeToImage(code) {
-    var img1 = PImage.make(100,50);
-    var ctx = img1.getContext('2d');
-    ctx.fillStyle = 'rgba(255,0,0,0.5)';
-    ctx.fillRect(0,0,100,100);
-
-    PImage.encodePNG(img1, fs.createWriteStream(storagePath + '/images/output.png'), function(err) {
-    console.log("wrote out the png file to out.png");
-});
   }
 }
 
