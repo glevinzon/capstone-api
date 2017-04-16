@@ -17,7 +17,8 @@ const AudioOperation = use('App/Operations/AudioOperation');
 const EquationAppOperation = use('App/Operations/EquationAppOperation')
 const TokenOperation = use('App/Operations/TokenOperation')
 
-var gd = require('node-gd');
+var PImage = require('pureimage');
+var fs = require('fs');
 const Helpers = use('Helpers')
 const storagePath = Helpers.publicPath()
 
@@ -241,17 +242,14 @@ class EquationOperation extends Operation {
   }
 
   * codeToImage(code) {
-    var img = gd.createSync(200, 80);
-    img.colorAllocate(0, 255, 0);
-    var txtColor = img.colorAllocate(255, 0, 255);
-    var fontPath = storagePath + '/assets/fonts/Roboto-Thin.ttf';
-    img.stringFT(txtColor, fontPath, 24, 0, 10, 60, code);
+    var img1 = PImage.make(100,50);
+    var ctx = img1.getContext('2d');
+    ctx.fillStyle = 'rgba(255,0,0,0.5)';
+    ctx.fillRect(0,0,100,100);
 
-    img.savePng(storagePath + '/images/output.png', 1, function(err) {
-      if(err) {
-        throw err;
-      }
-    });
+    PImage.encodePNG(img1, fs.createWriteStream(storagePath + '/images/output.png'), function(err) {
+    console.log("wrote out the png file to out.png");
+});
   }
 }
 
