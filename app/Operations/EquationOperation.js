@@ -17,6 +17,10 @@ const AudioOperation = use('App/Operations/AudioOperation');
 const EquationAppOperation = use('App/Operations/EquationAppOperation')
 const TokenOperation = use('App/Operations/TokenOperation')
 
+var gd = require('node-gd');
+const Helpers = use('Helpers')
+const storagePath = Helpers.publicPath()
+
 /**
  * Operations for Equation model
  *
@@ -80,6 +84,8 @@ class EquationOperation extends Operation {
       equation.active = this.active
 
       yield equation.save()
+
+      yield this.codeToImage(equation.code)
 
       let title = 'Dataset Update'
       let text = 'The ' + equation.name + ' was added to the dataset.'
@@ -232,6 +238,20 @@ class EquationOperation extends Operation {
       function * results (value) {
         yield broadcastOp.sendMessageToUser(value.device_token, message)
       }
+  }
+
+  * codeToImage(code) {
+    var img = gd.createSync(200, 80);
+    img.colorAllocate(0, 255, 0);
+    var txtColor = img.colorAllocate(255, 0, 255);
+    var fontPath = storagePath + '/assets/fonts/Roboto-Thin.ttf';
+    img.stringFT(txtColor, fontPath, 24, 0, 10, 60, code);
+
+    img.savePng(storagePath + '/images/output.png', 1, function(err) {
+      if(err) {
+        throw err;
+      }
+    });
   }
 }
 
