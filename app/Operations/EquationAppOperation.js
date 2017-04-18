@@ -17,6 +17,8 @@ const AudioOperation = use('App/Operations/AudioOperation');
 
 var request = require('request')
 
+const Database = use('Database')
+
 /**
  * Operations for Equation model
  *
@@ -124,51 +126,19 @@ class EquationAppOperation extends Operation {
     }
   }
 
-  * getListToAndroid () {
-    try {
-      let equations = new Equation()
-
-      if (this.filter === 'paginate') {
-        equations = yield Equation.query().orderBy('created_at', 'desc').paginate(this.page, this.count)
-      } else {
-        equations = yield Equation.all()
-      }
-
-      let tags = yield Tag.all()
-      let records = yield Record.all()
-
-      return equations
-    } catch (e) {
-      this.addError(HTTPResponse.STATUS_INTERNAL_SERVER_ERROR, e.message)
-      return false
-    }
-  }
-
   * getEquation () {
     try {
       let equations = new Equation()
-      var result = []
-      if (this.keyword) {
-        if (this.by === 'equation') {
-          equations = yield Equation.findBy('name', this.keyword)
-          result = result.concat(equations)
-        } else if (this.by === 'note') {
-          equations = yield Equation.findBy('note', this.keyword)
-          result = result.concat(equations)
-        } else if (this.by === 'tag') {
-          let tag = yield Tag.findBy('name', this.keyword)
-          let records = yield Record
-                      .query().where('tagId', tag.id)
-
-          yield * foreach(records, search)
-
-          function * search (record) {
-            let equation = yield Equation.query().where('id', record.eqId)
-            result = result.concat(equation)
-          }
-        }
-        return result
-      }
+        equations = yield Database
+                      .table('equations')
+                      .distinct('equations.*')
+                      .innerJoin('records', 'equations.id', 'records.eqId')
+                      .innerJoin('tags', 'tags.id', 'records.tagId')
+                      .whereRaw('tags.name LIKE ?', '%' + this.keyword + '%')
+                      .paginate(this.page, this.count)
+        // equations = yield Database
+        //               .raw(`select DISTINCT equations.* from equations join records on equations.id = records.eqId join tags on tags.id = records.tagId where tags.name LIKE '%${this.keyword}%' group by equations.id`)
+      return equations
     } catch (e) {
       this.addError(HTTPResponse.STATUS_INTERNAL_SERVER_ERROR, e.message)
       return false

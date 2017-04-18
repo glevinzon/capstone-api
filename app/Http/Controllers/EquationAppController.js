@@ -58,10 +58,11 @@ class EquationAppController {
 
   * show (request, response) {
     let equationOp = new EquationOperation()
-    let { by, keyword } = request.all()
+    let { keyword, page, count } = request.all()
 
-    equationOp.by = by
     equationOp.keyword = keyword
+    equationOp.page = page
+    equationOp.count = count
 
     let equations = yield equationOp.getEquation()
     if (equations === false) {
