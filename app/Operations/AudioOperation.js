@@ -30,11 +30,11 @@ class AudioOperation extends Operation {
 
     const audioDir = this.model.getAudioDirectory(this.model.id);
     const fileName = this.model.getAudioFileName(this.audioFile.extension());
-    const storagePath = `../${audioDir}`;
+    const publicPath = `../${audioDir}`;
 
-    mkdirp.sync(storagePath);
+    mkdirp.sync(publicPath);
 
-    yield this.audioFile.move(storagePath, fileName);
+    yield this.audioFile.move(publicPath, fileName);
 
     if (!this.audioFile.moved()) {
       throw new HttpException(this.audioFile.errors());
@@ -51,11 +51,11 @@ class AudioOperation extends Operation {
     }
 
     const fileName = `${filename}.${audioFile.extension()}`;
-    const storagePath = `${Helpers.storagePath()}/${directory}`;
+    const publicPath = `${Helpers.publicPath()}/${directory}`;
 
-    mkdirp.sync(storagePath);
+    mkdirp.sync(publicPath);
 
-    yield audioFile.move(storagePath, fileName);
+    yield audioFile.move(publicPath, fileName);
 
     if (!audioFile.moved()) {
       throw new HttpException(audioFile.errors());
