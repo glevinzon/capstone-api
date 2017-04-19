@@ -10,7 +10,7 @@ class Audio extends Lucid {
    * @returns {string}
    */
   static getAudioDirectory() {
-    return `uploads/recordings`;
+    return `assets/uploads/recordings`;
   }
 }
 
