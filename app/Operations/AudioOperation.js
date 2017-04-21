@@ -51,17 +51,20 @@ class AudioOperation extends Operation {
     }
 
     const fileName = `${filename}.${audioFile.extension()}`;
-    const publicPath = `${Helpers.publicPath()}/${directory}`;
+    const storagePath = `${Helpers.storagePath()}/${directory}`;
 
-    mkdirp.sync(publicPath);
+    mkdirp.sync(storagePath);
 
-    yield audioFile.move(publicPath, fileName);
+    yield audioFile.move(storagePath, fileName);
 
     if (!audioFile.moved()) {
       throw new HttpException(audioFile.errors());
     }
 
-    return `/${directory}/${fileName}`;
+    return {
+      url: storagePath + `/${fileName}`,
+      filename: fileName
+    };
   }
 }
 

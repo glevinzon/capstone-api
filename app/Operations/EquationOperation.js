@@ -16,6 +16,7 @@ const Audio = use('App/Model/Audio');
 const AudioOperation = use('App/Operations/AudioOperation');
 const EquationAppOperation = use('App/Operations/EquationAppOperation')
 const TokenOperation = use('App/Operations/TokenOperation')
+const S3Operation = use('App/Operations/S3Operation');
 
 /**
  * Operations for Equation model
@@ -196,7 +197,7 @@ class EquationOperation extends Operation {
 
     try {
       if (!this.audioUrl) {
-        this.audioUrl = yield AudioOperation.getAudioUrlFromFile(this.audio, directory, filename);
+        var record = yield AudioOperation.getAudioUrlFromFile(this.audio, directory, filename);
       }
 
       let equation = new Equation()
@@ -207,8 +208,10 @@ class EquationOperation extends Operation {
           return false
         }
       }
-      equation.audioUrl = Env.get('API_HOST') + this.audioUrl
+      equation.audioUrl = 'https://s3-ap-southeast-1.amazonaws.com/apicapstone/uploads/' + record.filename
       yield equation.save()
+
+      yield S3Operation.uploadAudioToS3Bucket(record.url, record.filename)
 
       return equation;
     } catch (e) {
