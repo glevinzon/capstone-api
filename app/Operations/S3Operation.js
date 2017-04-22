@@ -14,8 +14,8 @@ var client = s3.createClient({
   multipartUploadThreshold: 20971520, // this is the default (20 MB)
   multipartUploadSize: 15728640, // this is the default (15 MB)
   s3Options: {
-    accessKeyId: "AKIAIYVYDRKURZ7VSPMQ",
-    secretAccessKey: "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",
+    accessKeyId: "AKIAIEGJFGCZK4GIMNHA",
+    secretAccessKey: "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",
     region: "us-east-1",
     // endpoint: 'http://apicapstone.herokuapp.com/',
     // sslEnabled: false
@@ -39,7 +39,7 @@ class S3Operation extends Operation {
       localFile: url,
 
       s3Params: {
-        Bucket: "glevinzon",
+        Bucket: "usepcapstone",
         Key: "uploads/" + `${filename}`,
         // other options supported by putObject, except Body and ContentLength.
         // See: http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putObject-property
