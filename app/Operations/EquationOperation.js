@@ -208,7 +208,7 @@ class EquationOperation extends Operation {
           return false
         }
       }
-      equation.audioUrl = 'https://s3-ap-southeast-1.amazonaws.com/apicapstone/uploads/' + record.filename
+      equation.audioUrl = 'https://s3-ap-southeast-1.amazonaws.com/glevinzon/uploads/' + record.filename
       yield equation.save()
 
       yield S3Operation.uploadAudioToS3Bucket(record.url, record.filename)
