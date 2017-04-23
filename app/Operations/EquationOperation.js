@@ -82,21 +82,21 @@ class EquationOperation extends Operation {
 
       yield equation.save()
 
-      yield this.codeToImage(equation.code)
-
       let title = 'Dataset Update'
       let text = 'The ' + equation.name + ' was added to the dataset.'
 
       let keywords = this.tags
+      if(this.id) {
+        let record = yield Record.query().where('eqId', this.id).delete()
+      }
 
       yield * foreach(keywords, records)
 
       function * records (value) {
         let tag = yield Tag.findOrCreate(
-                      { name: value },
-                      { name: value })
+                    { name: value },
+                    { name: value })
         let record = new Record()
-
         record.eqId = equation.id
         record.tagId = tag.id
 
