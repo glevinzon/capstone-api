@@ -16,7 +16,7 @@ const Audio = use('App/Model/Audio');
 const AudioOperation = use('App/Operations/AudioOperation');
 
 var request = require('request')
-
+var empty = require('is-empty');
 const Database = use('Database')
 
 /**
@@ -154,7 +154,7 @@ class EquationAppOperation extends Operation {
                       .whereRaw('records.eqId = ?', this.id)
 
       var rawQuery = ''
-
+      console.log(rawQuery)
       tags.map((tag, i)=>{
         if(i < tags.length - 1){
           rawQuery = rawQuery.concat("tags.name LIKE '%"+tag.name + "%' OR ")
@@ -163,6 +163,7 @@ class EquationAppOperation extends Operation {
         }
       })
 
+      if(!empty(rawQuery)) {
         let equations = new Equation()
           equations = yield Database
                         .table('equations')
@@ -174,8 +175,12 @@ class EquationAppOperation extends Operation {
                         .whereRaw(rawQuery)
                         .paginate(this.page, this.count)
 
-      console.log(equations)
       return equations
+    } else {
+        this.addError(HTTPResponse.STATUS_NOT_FOUND, "No records found with id " + this.id)
+        return false
+      }
+
     } catch (e) {
       this.addError(HTTPResponse.STATUS_INTERNAL_SERVER_ERROR, e.message)
       return false
