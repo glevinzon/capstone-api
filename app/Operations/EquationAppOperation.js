@@ -131,7 +131,7 @@ class EquationAppOperation extends Operation {
       let equations = new Equation()
         equations = yield Database
                       .table('equations')
-                      .distinct('equations.*')
+                      // .distinct('equations.*')
                       .innerJoin('records', 'equations.id', 'records.eqId')
                       .innerJoin('tags', 'tags.id', 'records.tagId')
                       .whereRaw('tags.name LIKE ?', '%' + this.keyword + '%')
@@ -153,21 +153,29 @@ class EquationAppOperation extends Operation {
                       .innerJoin('records', 'tags.id', 'records.tagId')
                       .whereRaw('records.eqId = ?', this.id)
 
-      let relatedEquations = []
+      var rawQuery = ''
 
-      yield * foreach(tags, related)
+      tags.map((tag, i)=>{
+        if(i < tags.length - 1){
+          rawQuery = rawQuery.concat("tags.name LIKE '%"+tag.name + "%' OR ")
+        } else {
+          rawQuery = rawQuery.concat("tags.name LIKE '%"+tag.name + "%'")
+        }
+      })
 
-      function * related (value) {
         let equations = new Equation()
-        equations = yield Database
-                      .table('equations')
-                      .distinct('equations.*')
-                      .innerJoin('records', 'equations.id', 'records.eqId')
-                      .innerJoin('tags', 'tags.id', 'records.tagId')
-                      .whereRaw('tags.name LIKE ?', '%' + value.name + '%')
-        _.merge(relatedEquations, equations)
-      }
-      return relatedEquations
+          equations = yield Database
+                        .table('equations')
+                        // .select('equations.*')
+                        // .groupBy('records.id')
+                        // .distinct('equations.*')
+                        .innerJoin('records', 'equations.id', 'records.eqId')
+                        .innerJoin('tags', 'tags.id', 'records.tagId')
+                        .whereRaw(rawQuery)
+                        .paginate(this.page, this.count)
+
+      console.log(equations)
+      return equations
     } catch (e) {
       this.addError(HTTPResponse.STATUS_INTERNAL_SERVER_ERROR, e.message)
       return false
