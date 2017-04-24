@@ -131,7 +131,7 @@ class EquationAppOperation extends Operation {
       let equations = new Equation()
         equations = yield Database
                       .table('equations')
-                      // .distinct('equations.*')
+                      .distinct('equations.*')
                       .innerJoin('records', 'equations.id', 'records.eqId')
                       .innerJoin('tags', 'tags.id', 'records.tagId')
                       .whereRaw('tags.name LIKE ?', '%' + this.keyword + '%')
@@ -168,7 +168,7 @@ class EquationAppOperation extends Operation {
                         .table('equations')
                         // .select('equations.*')
                         // .groupBy('records.id')
-                        // .distinct('equations.*')
+                        .distinct('equations.*')
                         .innerJoin('records', 'equations.id', 'records.eqId')
                         .innerJoin('tags', 'tags.id', 'records.tagId')
                         .whereRaw(rawQuery)
