@@ -145,6 +145,35 @@ class EquationAppOperation extends Operation {
     }
   }
 
+  * getRelated () {
+    try {
+      let tags = new Tag()
+        tags = yield Database
+                      .table('tags')
+                      .innerJoin('records', 'tags.id', 'records.tagId')
+                      .whereRaw('records.eqId = ?', this.id)
+
+      let relatedEquations = []
+
+      yield * foreach(tags, related)
+
+      function * related (value) {
+        let equations = new Equation()
+        equations = yield Database
+                      .table('equations')
+                      .distinct('equations.*')
+                      .innerJoin('records', 'equations.id', 'records.eqId')
+                      .innerJoin('tags', 'tags.id', 'records.tagId')
+                      .whereRaw('tags.name LIKE ?', '%' + value.name + '%')
+        _.merge(relatedEquations, equations)
+      }
+      return relatedEquations
+    } catch (e) {
+      this.addError(HTTPResponse.STATUS_INTERNAL_SERVER_ERROR, e.message)
+      return false
+    }
+  }
+
   * destroy () {
     try {
       let equation = yield Equation.find(this.id)
