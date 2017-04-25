@@ -108,16 +108,19 @@ class EquationAppController {
 
   * uploadFile (request, response) {
     const equationOp = new EquationOperation();
-    const fileUploaded = request.file('audio', {
+    const fileUploaded = request.file('file', {
       maxSize: '10mb',
       allowedExtensions: ['m4a', '3gp', 'mp4', 'mp3', 'wav', 'mkv', 'ogg']
     });
 
-    let { eqId, deviceId } = request.all()
+    let { id, eqId, deviceId } = request.all()
 
-    equationOp.id = eqId
+    equationOp.id = id
+    equationOp.eqId = eqId
     equationOp.audio = fileUploaded;
-    equationOp.deviceId = deviceId;
+    equationOp.deviceId = deviceId
+
+    console.log(fileUploaded, deviceId)
 
     let pref = yield equationOp.uploadAudio();
 

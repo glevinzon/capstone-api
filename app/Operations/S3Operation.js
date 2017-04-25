@@ -57,6 +57,30 @@ class S3Operation extends Operation {
       console.log("done uploading");
     });
   }
+
+  static * uploadAppAudioToS3Bucket(url, filename) {
+    var params = {
+      localFile: url,
+
+      s3Params: {
+        Bucket: "usepcapstone",
+        Key: "app/uploads/" + `${filename}`,
+        // other options supported by putObject, except Body and ContentLength.
+        // See: http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putObject-property
+      },
+    };
+    var uploader = client.uploadFile(params);
+    uploader.on('error', function(err) {
+      console.error("unable to upload:", err.stack);
+    });
+    uploader.on('progress', function() {
+      console.log("progress", uploader.progressMd5Amount,
+                uploader.progressAmount, uploader.progressTotal);
+    });
+    uploader.on('end', function() {
+      console.log("done uploading");
+    });
+  }
 }
 
 module.exports = S3Operation;

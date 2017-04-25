@@ -5,6 +5,7 @@ const HTTPResponse = use('App/HTTPResponse')
 const Operation = use('App/Operations/Operation')
 const User = use('App/Model/User')
 const Tag = use('App/Model/Tag')
+const Preference = use('App/Model/Preference')
 const Record = use('App/Model/Record')
 const Equation = use('App/Model/Equation')
 const _ = use('lodash')
@@ -18,6 +19,8 @@ const AudioOperation = use('App/Operations/AudioOperation');
 var request = require('request')
 var empty = require('is-empty');
 const Database = use('Database')
+
+const S3Operation = use('App/Operations/S3Operation');
 
 /**
  * Operations for Equation model
@@ -45,6 +48,7 @@ class EquationAppOperation extends Operation {
     this.keyword = null
     this.audio = null
     this.deviceId = null
+    this.eqId = null
   }
 
   get rules () {
@@ -215,7 +219,7 @@ class EquationAppOperation extends Operation {
     }
 
     const directory = Audio.getAudioDirectory();
-    const filename = `ID${this.id}_${moment().format("YYYYMMDD-HHmmss")}`;
+    const filename = `ID${this.eqId}_${moment().format("YYYYMMDD-HHmmss")}`;
 
     try {
       if (!this.audioUrl) {
@@ -224,24 +228,30 @@ class EquationAppOperation extends Operation {
 
       let pref = new Preference()
       if(this.id){
-        pref = yield Preference.findBy('eqId', this.id)
-        if(!equation){
-          this.addError(HTTPResponse.STATUS_NOT_FOUND, 'The equation does not exist')
+        pref = yield Preference.findBy('id', this.id)
+        if(!pref){
+          this.addError(HTTPResponse.STATUS_NOT_FOUND, 'The preference does not exist')
           return false
         }
       }
-      pref.eqId = this.id
+      pref.eqId = this.eqId
       pref.deviceId = this.deviceId
-      pref.audioUrl = 'https://s3-ap-southeast-1.amazonaws.com/usepcapstone/uploads/' + record.filename
-      yield pref.save()
+      pref.audioUrl = 'https://s3-ap-southeast-1.amazonaws.com/usepcapstone/app/uploads/' + record.filename
 
-      yield S3Operation.uploadAudioToS3Bucket(record.url, record.filename)
-      let res = {success : true, message: 'Successfully Uploaded'}
-      return res;
+      yield S3Operation.uploadAppAudioToS3Bucket(record.url, record.filename)
+
+      let resSuccess = {success : true, message: 'Successfully Uploaded'}
+      let resErr = {success : false, message: 'Error while uploading'}
+
+      if(yield pref.save()){
+        return resSuccess;
+      } else {
+        return resErr;
+      }
+
     } catch (e) {
       this.addError(HTTPResponse.STATUS_INTERNAL_SERVER_ERROR, e.message);
-      let res = {success : true, message: 'Error while uploading'}
-      return res;
+      return false
     }
   }
 
