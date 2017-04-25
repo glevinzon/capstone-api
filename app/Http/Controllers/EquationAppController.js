@@ -109,11 +109,13 @@ class EquationAppController {
   * uploadFile (request, response) {
     const equationOp = new EquationOperation();
     const fileUploaded = request.file('audio', {
-      maxSize: '3mb',
+      maxSize: '10mb',
       allowedExtensions: ['m4a', '3gp', 'mp4', 'mp3', 'wav', 'mkv', 'ogg']
     });
 
-    equationOp.id = request.param('eqId');
+    let { eqId } = request.all()
+
+    equationOp.id = eqId
     equationOp.audio = fileUploaded;
 
     let equations = yield equationOp.uploadAudio();

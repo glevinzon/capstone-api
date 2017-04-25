@@ -30,7 +30,7 @@ Route.post('/app/equations', 'EquationAppController.store')
 Route.get('/app/equations', 'EquationAppController.list')
 Route.get('/app/search', 'EquationAppController.show')
 Route.delete('/app/equation/:eqId', 'EquationAppController.destroy')
-Route.post('/app/equation/:eqId/upload', 'EquationAppController.uploadFile')
+Route.post('/app/equation/upload', 'EquationAppController.uploadFile')
 Route.get('/app/equation/download', 'EquationAppController.downloadFile')
 Route.get('/app/equations/related', 'EquationAppController.related')
 
