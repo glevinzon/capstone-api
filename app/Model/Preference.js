@@ -8,8 +8,8 @@ const Base = use('App/Model/Base')
  */
 class Preference extends Base {
 
-  equations () {
-    return this.hasMany('App/Model/Equation', 'id', 'eqId')
+  equation() {
+    return this.belongsTo('App/Model/Equation')
   }
 }
 

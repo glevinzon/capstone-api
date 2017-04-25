@@ -241,7 +241,7 @@ class EquationAppOperation extends Operation {
       yield S3Operation.uploadAppAudioToS3Bucket(record.url, record.filename)
 
       let resSuccess = {success : true, message: 'Successfully Uploaded'}
-      let resErr = {success : false, message: 'Error while uploading'}
+      let resErr = {success : false, message: "Error while uploading"}
 
       if(yield pref.save()){
         return resSuccess;

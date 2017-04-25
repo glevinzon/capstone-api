@@ -20,6 +20,10 @@ class Equation extends Base {
   records () {
     return this.hasMany('App/Model/Record', 'id', 'eqId')
   }
+
+  preferences () {
+    return this.hasMany('App/Model/Preference', 'id', 'eqId')
+  }
 }
 
 module.exports = Equation
