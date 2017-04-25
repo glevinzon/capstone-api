@@ -44,6 +44,7 @@ class EquationAppOperation extends Operation {
     this.by = null
     this.keyword = null
     this.audio = null
+    this.deviceId = null
   }
 
   get rules () {
@@ -218,25 +219,29 @@ class EquationAppOperation extends Operation {
 
     try {
       if (!this.audioUrl) {
-        this.audioUrl = yield AudioOperation.getAudioUrlFromFile(this.audio, directory, filename);
+        var record = yield AudioOperation.getAudioUrlFromFile(this.audio, directory, filename);
       }
 
-      let equation = new Equation()
+      let pref = new Preference()
       if(this.id){
-        equation = yield Equation.findBy('id', this.id)
+        pref = yield Preference.findBy('eqId', this.id)
         if(!equation){
           this.addError(HTTPResponse.STATUS_NOT_FOUND, 'The equation does not exist')
           return false
         }
       }
-      equation.audioUrl = Env.get('API_HOST') + this.audioUrl
-      yield equation.save()
+      pref.eqId = this.id
+      pref.deviceId = this.deviceId
+      pref.audioUrl = 'https://s3-ap-southeast-1.amazonaws.com/usepcapstone/uploads/' + record.filename
+      yield pref.save()
 
-      return equation;
+      yield S3Operation.uploadAudioToS3Bucket(record.url, record.filename)
+      let res = {success : true, message: 'Successfully Uploaded'}
+      return res;
     } catch (e) {
       this.addError(HTTPResponse.STATUS_INTERNAL_SERVER_ERROR, e.message);
-
-      return false;
+      let res = {success : true, message: 'Error while uploading'}
+      return res;
     }
   }
 

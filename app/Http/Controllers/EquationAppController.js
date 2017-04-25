@@ -113,20 +113,21 @@ class EquationAppController {
       allowedExtensions: ['m4a', '3gp', 'mp4', 'mp3', 'wav', 'mkv', 'ogg']
     });
 
-    let { eqId } = request.all()
+    let { eqId, deviceId } = request.all()
 
     equationOp.id = eqId
     equationOp.audio = fileUploaded;
+    equationOp.deviceId = deviceId;
 
-    let equations = yield equationOp.uploadAudio();
+    let pref = yield equationOp.uploadAudio();
 
-    if (equations === false) {
+    if (pref === false) {
       let error = equationOp.getFirstError();
 
       throw new HttpException(error.message, error.code);
     }
 
-    response.sendJson(equations);
+    response.sendJson(pref);
   }
 }
 

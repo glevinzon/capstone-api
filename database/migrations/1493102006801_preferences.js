@@ -9,6 +9,7 @@ class PreferencesTableSchema extends Schema {
       table.increments()
       table.string('code', 50).notNullable()
       table.integer('eqId', 10).unsigned().nullable().defaultTo(null).references('id').inTable('equations').onDelete('CASCADE').onUpdate('NO ACTION')
+      table.string('deviceId', 255).notNullable()
       table.string('audioUrl', 255).notNullable()
       table.timestamps()
     })
