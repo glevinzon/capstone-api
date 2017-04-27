@@ -14,8 +14,8 @@ var client = s3.createClient({
   multipartUploadThreshold: 20971520, // this is the default (20 MB)
   multipartUploadSize: 15728640, // this is the default (15 MB)
   s3Options: {
-    accessKeyId: "AKIAIEGJFGCZK4GIMNHA",
-    secretAccessKey: "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",
+    accessKeyId: Env.S3_ID,
+    secretAccessKey: Env.S3_SECRET,
     region: "us-east-1",
     // endpoint: 'http://apicapstone.herokuapp.com/',
     // sslEnabled: false
