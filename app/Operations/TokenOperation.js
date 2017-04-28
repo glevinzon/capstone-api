@@ -15,8 +15,6 @@ class TokenOperation extends Operation {
   constructor () {
     super()
 
-    this.id = null
-    this.code = null
     this.device_token = null
     this.prev_token = null
   }

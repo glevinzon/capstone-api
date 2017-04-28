@@ -13,14 +13,10 @@ class TokenController {
   * store (request, response) {
     let tokenOp = new TokenOperation()
     let {
-      id,
       token,
       prevToken
     } = request.post()
 
-    let tokenId = request.param('tokenId')
-
-    tokenOp.id = tokenId || id
     tokenOp.device_token = token
     tokenOp.prev_token = prevToken
 
