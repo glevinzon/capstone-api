@@ -16,7 +16,6 @@ class TokenOperation extends Operation {
     super()
 
     this.device_token = null
-    this.prev_token = null
   }
 
   get rules () {
@@ -36,13 +35,17 @@ class TokenOperation extends Operation {
     try {
       let token = new Token()
       token = yield Token.findOrCreate(
-                  { device_token: this.prev_token },
-                  { device_token: this.device_token })
+                      { device_token: this.prev_token },
+                      { device_token: this.device_token })
 
       if (!token) {
         this.addError(HTTPResponse.STATUS_NOT_FOUND, 'The token does not exist')
         return false
       }
+
+      token.device_token = this.device_token
+
+      yield token.save()
 
       return token
     } catch (e) {
