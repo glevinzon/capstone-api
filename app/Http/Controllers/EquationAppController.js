@@ -18,8 +18,8 @@ class EquationAppController {
       name,
       note,
       audioUrl,
-      active,
-      currentValues
+      currentValues,
+      token
     } = request.post()
 
     let eqId = request.param('eqId')
@@ -30,7 +30,8 @@ class EquationAppController {
     equationOp.note = note
     equationOp.audioUrl = audioUrl
     equationOp.tags = currentValues
-    equationOp.active = active
+    equationOp.active = 0
+    equationOp.token = token
 
     let equation = yield equationOp.store()
 

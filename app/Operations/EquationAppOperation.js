@@ -49,6 +49,7 @@ class EquationAppOperation extends Operation {
     this.audio = null
     this.deviceId = null
     this.eqId = null
+    this.token = null
   }
 
   get rules () {
@@ -88,16 +89,21 @@ class EquationAppOperation extends Operation {
 
       yield equation.save()
 
+      let title = 'Dataset Update'
+      let text = 'The ' + equation.name + ' was added to the dataset.'
+
       let keywords = this.tags
+      if(this.id) {
+        let record = yield Record.query().where('eqId', this.id).delete()
+      }
 
       yield * foreach(keywords, records)
 
       function * records (value) {
         let tag = yield Tag.findOrCreate(
-                      { name: value },
-                      { name: value })
+                    { name: value },
+                    { name: value })
         let record = new Record()
-
         record.eqId = equation.id
         record.tagId = tag.id
 

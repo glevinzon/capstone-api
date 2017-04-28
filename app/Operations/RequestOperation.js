@@ -3,22 +3,21 @@
 const { HttpException } = use('node-exceptions')
 const HTTPResponse = use('App/HTTPResponse')
 const Operation = use('App/Operations/Operation')
-const Token = use('App/Model/Token')
+const Request = use('App/Model/Request')
 /**
  * Operations for Token model
  *
  * @author glen
  * @class
  */
-class TokenOperation extends Operation {
+class RequestOperation extends Operation {
 
   constructor () {
     super()
 
     this.id = null
-    this.code = null
+    this.eqId = null
     this.device_token = null
-    this.prev_token = null
   }
 
   get rules () {
@@ -35,17 +34,21 @@ class TokenOperation extends Operation {
     }
 
     try {
-      let token = new Token()
-      token = yield Token.findOrCreate(
-                  { device_token: this.prev_token },
-                  { device_token: this.device_token })
+      let request = new Request()
+      if (this.id) {
+        request = yield Request.find(this.id)
 
-      if (!token) {
-        this.addError(HTTPResponse.STATUS_NOT_FOUND, 'The token does not exist')
-        return false
+        if (!request) {
+          this.addError(HTTPResponse.STATUS_NOT_FOUND, 'The request does not exist')
+          return false
+        }
       }
+      request.eqId = this.eqId
+      request.name = "Request to add equation to the dataset."
+      request.device_token = this.device_token
+      yield request.save()
 
-      return token
+      return request
     } catch (e) {
       this.addError(HTTPResponse.STATUS_INTERNAL_SERVER_ERROR, e.message)
       return false
@@ -54,9 +57,9 @@ class TokenOperation extends Operation {
 
   * getList () {
     try {
-      let tokens = yield Token.all()
+      let requests = yield Request.all()
 
-      return tokens
+      return requests
     } catch (e) {
       this.addError(HTTPResponse.STATUS_INTERNAL_SERVER_ERROR, e.message)
       return false
@@ -64,4 +67,4 @@ class TokenOperation extends Operation {
   }
 }
 
-module.exports = TokenOperation
+module.exports = RequestOperation
