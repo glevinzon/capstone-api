@@ -21,7 +21,8 @@ class TokenOperation extends Operation {
 
   get rules () {
     return {
-      device_token: 'required|max:255'
+      device_token: 'required|max:255',
+      device_token: 'required|max:255',
     }
   }
 
