@@ -35,3 +35,5 @@ Route.get('/app/equation/download', 'EquationAppController.downloadFile')
 Route.get('/app/equations/related', 'EquationAppController.related')
 
 Route.post('/app/tokens', 'TokenController.store')
+
+Route.get('/app/tags', 'EquationAppController.listTags')

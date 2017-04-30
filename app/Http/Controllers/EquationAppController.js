@@ -133,6 +133,14 @@ class EquationAppController {
 
     response.sendJson(pref);
   }
+
+  * listTags (request, response){
+    let equationOp = new EquationOperation()
+
+    let tags = yield equationOp.getTagList()
+
+    response.sendJson(tags)
+  }
 }
 
 module.exports = EquationAppController

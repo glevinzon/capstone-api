@@ -137,6 +137,17 @@ class EquationAppOperation extends Operation {
     }
   }
 
+  * getTagList () {
+    try {
+      let tags = yield Tag.all()
+
+      return tags
+    } catch (e) {
+      this.addError(HTTPResponse.STATUS_INTERNAL_SERVER_ERROR, e.message)
+      return false
+    }
+  }
+
   * getEquation () {
     try {
       let equations = new Equation()
