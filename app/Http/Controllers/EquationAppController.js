@@ -139,7 +139,7 @@ class EquationAppController {
 
     let tags = yield equationOp.getTagList()
 
-    response.sendJson(tags)
+    response.sendJson({tags: tags})
   }
 }
 
