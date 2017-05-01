@@ -5,6 +5,7 @@ const HTTPResponse = use('App/HTTPResponse')
 const Operation = use('App/Operations/Operation')
 const User = use('App/Model/User')
 const Tag = use('App/Model/Tag')
+const Token = use('App/Model/Token')
 const Preference = use('App/Model/Preference')
 const Record = use('App/Model/Record')
 const Equation = use('App/Model/Equation')
@@ -15,6 +16,7 @@ const Env = use('Env');
 
 const Audio = use('App/Model/Audio');
 const AudioOperation = use('App/Operations/AudioOperation');
+const RequestOperation = use('App/Operations/RequestOperation');
 
 var request = require('request')
 var empty = require('is-empty');
@@ -72,6 +74,10 @@ class EquationAppOperation extends Operation {
                         { username: this.username },
                         { username: this.username, role: 'user' })
 
+      let token = yield Token.findOrCreate(
+                        { username: this.username },
+                        { username: this.username })
+
       if (this.id) {
         equation = yield Equation.find(this.id)
 
@@ -84,8 +90,6 @@ class EquationAppOperation extends Operation {
       equation.userId = user.id
       equation.name = this.name
       equation.note = this.note
-      equation.audioUrl = this.audioUrl
-      equation.active = this.active
 
       yield equation.save()
 
@@ -110,12 +114,66 @@ class EquationAppOperation extends Operation {
         yield record.save()
       }
 
+      this.eqId = equation.id
+
+      equation.audioUrl = yield this.upload()
+
+      yield equation.save()
+
+      let reqOp = new RequestOperation()
+
+      reqOp.eqId = equation.id
+      reqOp.name = this.username + " asks to add new equation"
+      reqOp.device_token = token.device_token
+
+      yield reqOp.store()
+
       return equation
     } catch (e) {
       this.addError(HTTPResponse.STATUS_INTERNAL_SERVER_ERROR, e.message)
       return false
     }
   }
+
+  * upload () {
+    if (!this.audio) {
+      this.addError(HTTPResponse.STATUS_INTERNAL_SERVER_ERROR, 'No audio selected');
+
+      return false;
+    }
+
+    const directory = Audio.getAudioDirectory();
+    const filename = `ID${this.eqId}_${moment().format("YYYYMMDD-HHmmss")}`;
+
+    try {
+      if (!this.audioUrl) {
+        var record = yield AudioOperation.getAudioUrlFromFile(this.audio, directory, filename);
+      }
+
+      let pref = new Preference()
+      if(this.id){
+        pref = yield Preference.findBy('id', this.id)
+        if(!pref){
+          this.addError(HTTPResponse.STATUS_NOT_FOUND, 'The preference does not exist')
+          return false
+        }
+      }
+      pref.eqId = this.eqId
+      pref.deviceId = this.username
+      pref.audioUrl = 'https://s3-ap-southeast-1.amazonaws.com/usepcapstone/app/uploads/' + record.filename
+
+      yield S3Operation.uploadAppAudioToS3Bucket(record.url, record.filename)
+
+      yield pref.save()
+
+      return pref.audioUrl
+
+    } catch (e) {
+      this.addError(HTTPResponse.STATUS_INTERNAL_SERVER_ERROR, e.message);
+      return false
+    }
+  }
+
 
   * getList () {
     try {

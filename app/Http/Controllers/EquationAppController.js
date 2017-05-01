@@ -12,14 +12,17 @@ class EquationAppController {
 
   * store (request, response) {
     let equationOp = new EquationOperation()
+    const fileUploaded = request.file('file', {
+      maxSize: '10mb',
+      allowedExtensions: ['m4a', '3gp', 'mp4', 'mp3', 'wav', 'mkv', 'ogg']
+    });
+
     let {
       id,
       username,
       name,
       note,
-      audioUrl,
-      currentValues,
-      token
+      tags,
     } = request.post()
 
     let eqId = request.param('eqId')
@@ -28,10 +31,8 @@ class EquationAppController {
     equationOp.username = username
     equationOp.name = name
     equationOp.note = note
-    equationOp.audioUrl = audioUrl
-    equationOp.tags = currentValues
-    equationOp.active = 0
-    equationOp.token = token
+    equationOp.tags = tags
+    equationOp.audio = fileUploaded;
 
     let equation = yield equationOp.store()
 

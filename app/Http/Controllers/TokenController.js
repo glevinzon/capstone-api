@@ -13,10 +13,12 @@ class TokenController {
   * store (request, response) {
     let tokenOp = new TokenOperation()
     let {
+      username,
       token,
       prevToken
     } = request.post()
 
+    tokenOp.username = username
     tokenOp.device_token = token
     tokenOp.prev_token = prevToken
 

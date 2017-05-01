@@ -17,6 +17,7 @@ class RequestOperation extends Operation {
 
     this.id = null
     this.eqId = null
+    this.name = null
     this.device_token = null
   }
 
@@ -44,11 +45,13 @@ class RequestOperation extends Operation {
         }
       }
       request.eqId = this.eqId
-      request.name = "Request to add equation to the dataset."
-      request.device_token = this.device_token
+      request.name = this.name
+      request.token = this.device_token
+
+      console.log(this.device_token)
       yield request.save()
 
-      return request
+      return true
     } catch (e) {
       this.addError(HTTPResponse.STATUS_INTERNAL_SERVER_ERROR, e.message)
       return false

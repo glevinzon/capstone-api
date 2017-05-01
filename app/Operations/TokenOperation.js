@@ -15,7 +15,9 @@ class TokenOperation extends Operation {
   constructor () {
     super()
 
+    this.prev_token = null
     this.device_token = null
+    this.username = null
   }
 
   get rules () {
@@ -43,6 +45,7 @@ class TokenOperation extends Operation {
         return false
       }
 
+      token.username = this.username
       token.device_token = this.device_token
 
       yield token.save()
