@@ -19,7 +19,8 @@ const AudioOperation = use('App/Operations/AudioOperation');
 const RequestOperation = use('App/Operations/RequestOperation');
 
 var request = require('request')
-var empty = require('is-empty');
+var trim = require('trim')
+var empty = require('is-empty')
 const Database = use('Database')
 
 const S3Operation = use('App/Operations/S3Operation');
@@ -104,6 +105,7 @@ class EquationAppOperation extends Operation {
       yield * foreach(keywords, records)
 
       function * records (value) {
+        value = trim(value)
         let tag = yield Tag.findOrCreate(
                     { name: value },
                     { name: value })
