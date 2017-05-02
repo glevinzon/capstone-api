@@ -27,6 +27,10 @@ class EquationAppController {
 
     let eqId = request.param('eqId')
 
+    tags = JSON.parse(tags)
+
+    console.log(tags)
+
     equationOp.id = eqId || id
     equationOp.username = username
     equationOp.name = name
