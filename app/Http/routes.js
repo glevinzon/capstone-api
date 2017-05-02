@@ -37,3 +37,7 @@ Route.get('/app/equations/related', 'EquationAppController.related')
 Route.post('/app/tokens', 'TokenController.store')
 
 Route.get('/app/tags', 'EquationAppController.listTags')
+
+Route.get('/app/requests', 'EquationAppController.listRequests')
+
+Route.post('/app/request/activate', 'EquationAppController.activate')

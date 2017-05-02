@@ -1,7 +1,7 @@
 'use strict';
 const EquationOperation = use('App/Operations/EquationOperation')
 const Tag = use('App/Model/Tag')
-const Record = use('App/Model/Record')
+const Equation = use('App/Model/Equation')
 const moment = use('moment')
 
 class Broadcast {
@@ -10,7 +10,7 @@ class Broadcast {
   // More docs here: https://github.com/node-schedule/node-schedule#cron-style-scheduling
   static get schedule() {
     // once every minute
-    return '*/10 * * * *'
+    return '10 * * *'
   }
 
   // This is the function that is called at the defined schedule
@@ -18,9 +18,9 @@ class Broadcast {
     let eqOp = new EquationOperation
 
     let tags = yield Tag.query().count('id as tags')
-    let records = yield Record.query().count('id as records')
+    let equations = yield Equation.query().count('id as equations')
     let title = 'Daily Report'
-    let text = `${records[0].records} Records | ${tags[0].tags} Tags as of ${moment().format()} .`
+    let text = `${equations[0].equations} Equations | ${tags[0].tags} Tags as of ${moment().format()} .`
 
     yield eqOp.broadcastNotif({'title': title, 'text': text})
 

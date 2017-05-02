@@ -2,6 +2,7 @@
 
 const { HttpException } = use('node-exceptions')
 const EquationOperation = use('App/Operations/EquationAppOperation')
+const RequestOperation = use('App/Operations/RequestOperation')
 
 /**
  * Controller for Equation Endpoints
@@ -49,6 +50,23 @@ class EquationAppController {
     response.sendJson(equation)
   }
 
+  * activate (request, response) {
+    let requestOp = new RequestOperation()
+    let { id, token } = request.all()
+
+    requestOp.id = id
+
+    let equations = yield requestOp.activateRecord()
+
+    if (equations === false) {
+      let error = requestOp.getFirstError()
+
+      throw new HttpException(error.message, error.code)
+    }
+
+    response.sendJson(equations)
+  }
+
   * list (request, response) {
     let equationOp = new EquationOperation()
     let { filter, page, count } = request.all()
@@ -60,6 +78,19 @@ class EquationAppController {
     let equation = yield equationOp.getList()
 
     response.sendJson(equation)
+  }
+
+  * listRequests (request, response) {
+    let requestOp = new RequestOperation()
+    let { filter, page, count } = request.all()
+
+    requestOp.filter = filter
+    requestOp.page = page
+    requestOp.count = count
+
+    let requests = yield requestOp.getList()
+
+    response.sendJson(requests)
   }
 
   * show (request, response) {

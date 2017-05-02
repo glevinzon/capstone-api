@@ -5,6 +5,7 @@ const HTTPResponse = use('App/HTTPResponse')
 const Operation = use('App/Operations/Operation')
 const User = use('App/Model/User')
 const Tag = use('App/Model/Tag')
+const Request = use('App/Model/Request')
 const Token = use('App/Model/Token')
 const Preference = use('App/Model/Preference')
 const Record = use('App/Model/Record')
@@ -130,6 +131,8 @@ class EquationAppOperation extends Operation {
 
       yield reqOp.store()
 
+      // yield this.broadcastNotif({title: title, text: text})
+
       return equation
     } catch (e) {
       this.addError(HTTPResponse.STATUS_INTERNAL_SERVER_ERROR, e.message)
@@ -176,13 +179,12 @@ class EquationAppOperation extends Operation {
     }
   }
 
-
   * getList () {
     try {
       let equations = new Equation()
 
       if (this.filter === 'paginate') {
-        equations = yield Equation.query().orderBy('created_at', 'desc').paginate(this.page, this.count)
+        equations = yield Equation.query().where('active', 1).orderBy('created_at', 'desc').paginate(this.page, this.count)
       } else {
         equations = yield Equation.all()
       }
@@ -363,6 +365,21 @@ class EquationAppOperation extends Operation {
         console.log('Done!')
       }
     })
+  }
+
+  * broadcastNotif(message) {
+    const tokenOp = new TokenOperation()
+    let tokens = yield tokenOp.getList()
+    let tokensArr = []
+    _.toArray(tokens).map((token=> {
+      tokensArr.push(token)
+    }))
+
+    yield * foreach(tokensArr, results)
+
+      function * results (value) {
+        yield this.sendMessageToUser(value.device_token, message)
+      }
   }
 }
 
