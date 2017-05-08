@@ -192,7 +192,7 @@ class EquationAppOperation extends Operation {
       let tags = yield Tag.all()
       let records = yield Record.all()
 
-      return {equation: equation, tags: tags, records: records}
+      return equations
     } catch (e) {
       this.addError(HTTPResponse.STATUS_INTERNAL_SERVER_ERROR, e.message)
       return false
