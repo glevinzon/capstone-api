@@ -119,7 +119,9 @@ class EquationAppOperation extends Operation {
 
       this.eqId = equation.id
 
-      equation.audioUrl = yield this.upload()
+      if(this.audio){
+        equation.audioUrl = yield this.upload()
+      }
 
       yield equation.save()
 
