@@ -240,7 +240,7 @@ class EquationAppOperation extends Operation {
                       .innerJoin('records', 'tags.id', 'records.tagId')
                       .whereRaw('records.eqId = ?', this.id)
 
-      var rawQuery = 'equations.active = 1 && ';
+      var rawQuery = 'equations.active = 1 AND ';
       console.log(rawQuery)
       tags.map((tag, i)=>{
         if(i < tags.length - 1){
