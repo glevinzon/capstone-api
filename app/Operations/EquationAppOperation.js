@@ -240,7 +240,7 @@ class EquationAppOperation extends Operation {
                       .innerJoin('records', 'tags.id', 'records.tagId')
                       .whereRaw('records.eqId = ?', this.id)
 
-      var rawQuery = ''
+      var rawQuery = 'equations.active = 1 && ';
       console.log(rawQuery)
       tags.map((tag, i)=>{
         if(i < tags.length - 1){
@@ -259,7 +259,6 @@ class EquationAppOperation extends Operation {
                         .distinct('equations.*')
                         .innerJoin('records', 'equations.id', 'records.eqId')
                         .innerJoin('tags', 'tags.id', 'records.tagId')
-                        .whereRaw('equations.active = ?', '1' )
                         .whereRaw(rawQuery)
                         .paginate(this.page, this.count)
 

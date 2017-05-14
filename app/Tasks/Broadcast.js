@@ -10,7 +10,7 @@ class Broadcast {
   // More docs here: https://github.com/node-schedule/node-schedule#cron-style-scheduling
   static get schedule() {
     // once every minute
-    return '10 * * *'
+    return '0 0 10 1/1 * ? *'
   }
 
   // This is the function that is called at the defined schedule
