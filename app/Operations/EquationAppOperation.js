@@ -238,6 +238,7 @@ class EquationAppOperation extends Operation {
         tags = yield Database
                       .table('tags')
                       .innerJoin('records', 'tags.id', 'records.tagId')
+                      .whereRaw('equations.active = ?', '1' )
                       .whereRaw('records.eqId = ?', this.id)
 
       var rawQuery = ''
