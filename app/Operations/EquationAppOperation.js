@@ -220,6 +220,7 @@ class EquationAppOperation extends Operation {
                       .distinct('equations.*')
                       .innerJoin('records', 'equations.id', 'records.eqId')
                       .innerJoin('tags', 'tags.id', 'records.tagId')
+                      .whereRaw('equations.active = ?', '1' )
                       .whereRaw('tags.name LIKE ?', '%' + this.keyword + '%')
                       .paginate(this.page, this.count)
         // equations = yield Database
