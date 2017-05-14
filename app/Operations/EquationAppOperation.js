@@ -238,16 +238,15 @@ class EquationAppOperation extends Operation {
         tags = yield Database
                       .table('tags')
                       .innerJoin('records', 'tags.id', 'records.tagId')
-                      .whereRaw('equations.active = ?', '1' )
                       .whereRaw('records.eqId = ?', this.id)
 
       var rawQuery = ''
       console.log(rawQuery)
       tags.map((tag, i)=>{
         if(i < tags.length - 1){
-          rawQuery = rawQuery.concat("tags.name LIKE '%"+tag.name + "%' OR ")
+          rawQuery = rawQuery.concat("equations.active = 1 && tags.name LIKE '%"+tag.name + "%' OR ")
         } else {
-          rawQuery = rawQuery.concat("tags.name LIKE '%"+tag.name + "%'")
+          rawQuery = rawQuery.concat("equations.active = 1 && tags.name LIKE '%"+tag.name + "%'")
         }
       })
 
