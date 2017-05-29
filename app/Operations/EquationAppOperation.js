@@ -26,6 +26,8 @@ const Database = use('Database')
 
 const S3Operation = use('App/Operations/S3Operation');
 
+var ip = require('ip');
+
 /**
  * Operations for Equation model
  *
@@ -167,9 +169,9 @@ class EquationAppOperation extends Operation {
       }
       pref.eqId = this.eqId
       pref.deviceId = this.username
-      pref.audioUrl = 'https://s3-ap-southeast-1.amazonaws.com/usepcapstone/app/uploads/' + record.filename
+      pref.audioUrl = ip.address() + '/uploads/audios/' + record.filename
 
-      yield S3Operation.uploadAppAudioToS3Bucket(record.url, record.filename)
+      // yield S3Operation.uploadAppAudioToS3Bucket(record.url, record.filename)
 
       yield pref.save()
 
